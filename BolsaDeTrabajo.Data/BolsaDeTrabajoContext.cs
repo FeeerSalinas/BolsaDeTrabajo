@@ -25,6 +25,8 @@ namespace BolsaDeTrabajo.Data
         public DbSet<AplicacionOferta> AplicacionesOferta { get; set; }
         public DbSet<OfertaLaboral> OfertasLaborales { get; set; }
 
+        public DbSet<Publicacion> Publicaciones { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Usuario>().ToTable("Usuario");
@@ -44,6 +46,7 @@ namespace BolsaDeTrabajo.Data
             modelBuilder.Entity<Idioma>().ToTable("Idiomas");
             modelBuilder.Entity<AplicacionOferta>().ToTable("AplicacionesOferta");
             modelBuilder.Entity<OfertaLaboral>().ToTable("Oferta_laboral");
+            modelBuilder.Entity<Publicacion>().ToTable("Publicaciones");
 
             modelBuilder.Entity<Usuario>().HasKey(u => u.IdUsuario);
             modelBuilder.Entity<Usuario>()
@@ -169,6 +172,13 @@ namespace BolsaDeTrabajo.Data
                 .HasOne(a => a.Oferta)
                 .WithMany()
                 .HasForeignKey(a => a.IdOferta)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Publicacion>().HasKey(p => p.IdPublicacion);
+            modelBuilder.Entity<Publicacion>()
+                .HasOne(p => p.Aspirante)
+                .WithMany()
+                .HasForeignKey(p => p.IdAspirante)
                 .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);

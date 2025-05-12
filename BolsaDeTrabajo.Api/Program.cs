@@ -49,6 +49,15 @@ builder.Services.AddScoped<IContactoRepo, ContactoRepo>();
 builder.Services.AddScoped<IDireccionRepo, DireccionRepo>();
 builder.Services.AddScoped<IDocumentoRepo, DocumentoRepo>();
 builder.Services.AddScoped<IHabilidadRepo, HabilidadRepo>();
+builder.Services.AddScoped<IRecomendacionRepo, RecomendacionRepo>();
+builder.Services.AddScoped<IPublicacionRepo, PublicacionRepo>();
+builder.Services.AddScoped<IExperienciaRepo, ExperienciaRepo>();
+
+
+
+
+
+
 
 builder.Services.AddSingleton<JwtTokenGenerator>();
 

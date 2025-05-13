@@ -52,11 +52,13 @@ builder.Services.AddScoped<IHabilidadRepo, HabilidadRepo>();
 builder.Services.AddScoped<IRecomendacionRepo, RecomendacionRepo>();
 builder.Services.AddScoped<IPublicacionRepo, PublicacionRepo>();
 builder.Services.AddScoped<IExperienciaRepo, ExperienciaRepo>();
-
-
-
-
-
+builder.Services.AddScoped<IFormacionRepo, FormacionRepo>();
+builder.Services.AddScoped<ICertificacionRepo, CertificacionRepo>();
+//probar
+builder.Services.AddScoped<ILogroRepo, LogroRepo>();
+builder.Services.AddScoped<IEventoRepo, EventoRepo>();
+builder.Services.AddScoped<IExamenRepo, ExamenRepo>();
+builder.Services.AddScoped<IIdiomaRepo, IdiomaRepo>();
 
 
 builder.Services.AddSingleton<JwtTokenGenerator>();

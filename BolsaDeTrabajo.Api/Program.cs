@@ -59,6 +59,8 @@ builder.Services.AddScoped<ILogroRepo, LogroRepo>();
 builder.Services.AddScoped<IEventoRepo, EventoRepo>();
 builder.Services.AddScoped<IExamenRepo, ExamenRepo>();
 builder.Services.AddScoped<IIdiomaRepo, IdiomaRepo>();
+builder.Services.AddScoped<IOfertaRepo, OfertaRepo>();
+builder.Services.AddScoped<IAplicacionOfertaRepo, AplicacionOfertaRepo>();
 
 
 builder.Services.AddSingleton<JwtTokenGenerator>();

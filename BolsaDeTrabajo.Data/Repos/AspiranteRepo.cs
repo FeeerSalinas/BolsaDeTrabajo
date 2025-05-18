@@ -50,6 +50,14 @@ namespace BolsaDeTrabajo.Data.Repos
             return true;
         }
 
+        public async Task<List<Aspirante>> ObtenerAspirantesPorPuesto(string puestoBusca, CancellationToken cancellationToken)
+        {
+            return await _context.Aspirantes
+                 .Include(u => u.Usuario)
+                 .Where(a => a.PuestoBusca == puestoBusca)
+                 .ToListAsync();
+        }
+
         public async Task<List<Aspirante>> ObtenerPaginadosAsync(int pagina, int tamanoPagina, CancellationToken cancellationToken)
         {
             return await _context.Aspirantes

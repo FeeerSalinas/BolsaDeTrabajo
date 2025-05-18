@@ -16,5 +16,7 @@ namespace BolsaDeTrabajo.Queries
 
         public record ObtenerAspirantesPaginadosQuery(int Pagina, int TamanoPagina) : IRequest<List<Aspirante>>;
 
+        public record ObtenersAspirantesPorPuesto(string puestoBusca) : IRequest<List<Aspirante>>;
+
     }
 }

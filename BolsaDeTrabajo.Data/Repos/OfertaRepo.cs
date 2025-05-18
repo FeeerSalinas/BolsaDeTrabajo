@@ -79,5 +79,14 @@ namespace BolsaDeTrabajo.Data.Repos
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
         }
+
+        public async Task<List<OfertaLaboral>> ObtenerOfertaPorPerfil(string perfilAcademico, CancellationToken cancellationToken)
+        {
+            return await _context.OfertasLaborales
+                .Include(o => o.Empresa)
+                    .ThenInclude(e => e.Usuario)
+                .Where(o => o.PerfilAcademico == perfilAcademico)
+                .ToListAsync();
+        }
     }
 }

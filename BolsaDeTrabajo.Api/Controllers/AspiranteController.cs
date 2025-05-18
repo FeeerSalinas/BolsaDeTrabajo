@@ -60,5 +60,12 @@ namespace BolsaDeTrabajo.Api.Controllers
             var resultado = await _mediator.Send(new ObtenerAspirantesPaginadosQuery(page, size));
             return Ok(resultado);
         }
+
+        [HttpGet("filtro-puesto/{puestoBusca}")]
+        public async Task<IActionResult> ObtenerAspirantePorPuesto([FromRoute] string puestoBusca)
+        {
+            var resultado = await _mediator.Send(new ObtenersAspirantesPorPuesto(puestoBusca));
+            return Ok(resultado);
+        }
     }
 }

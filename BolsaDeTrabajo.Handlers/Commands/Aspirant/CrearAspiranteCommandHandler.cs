@@ -26,7 +26,8 @@ namespace BolsaDeTrabajo.Handlers.Commands.Aspirant
                 request.PrimerNombre,
                 request.PrimerApellido,
                 request.SegundoNombre,
-                request.SegundoApellido
+                request.SegundoApellido,
+                request.PuestoBusca
             );
             return await _repo.CrearAsync(aspirante, cancellationToken);
         }

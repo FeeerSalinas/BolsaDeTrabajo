@@ -16,5 +16,6 @@ namespace BolsaDeTrabajo.Data
         Task<OfertaLaboral?> ObtenerPorIdAsync(int idOferta, CancellationToken cancellationToken);
         Task<List<OfertaLaboral>> ObtenerTodasAsync(CancellationToken cancellationToken);
         Task<List<OfertaLaboral>> ObtenerPaginadoAsync(int page, int pageSize, CancellationToken cancellationToken);
+        Task<List<OfertaLaboral>> ObtenerOfertaPorPerfil(string perfilAcademico, CancellationToken cancellationToken);
     }
 }

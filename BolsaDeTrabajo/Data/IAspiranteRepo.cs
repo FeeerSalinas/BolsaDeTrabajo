@@ -15,5 +15,6 @@ namespace BolsaDeTrabajo.Data
         Task<Aspirante?> ObtenerPorIdAsync(int idAspirante, CancellationToken cancellationToken);
         Task<List<Aspirante>> ObtenerTodosAsync(CancellationToken cancellationToken);
         Task<List<Aspirante>> ObtenerPaginadosAsync(int pagina, int tamanoPagina, CancellationToken cancellationToken);
+        Task<List<Aspirante>> ObtenerAspirantesPorPuesto(string puestoBusca, CancellationToken cancellationToken);
     }
 }

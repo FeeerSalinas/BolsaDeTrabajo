@@ -88,5 +88,13 @@ namespace BolsaDeTrabajo.Api.Controllers
             var ofertas = await _mediator.Send(new ObtenerOfertasPaginadasQuery(page, pageSize));
             return Ok(ofertas);
         }
+
+        [HttpGet("filtro-perfil-academico/{perfilAcademico}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ObtenerPorOfeta([FromRoute]string perfilAcademico)
+        {
+            var ofertas = await _mediator.Send(new ObtenerOfertaPorPerfilAcademico(perfilAcademico));
+            return Ok(ofertas);
+        }
     }
 }

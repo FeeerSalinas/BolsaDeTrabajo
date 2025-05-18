@@ -17,15 +17,18 @@ namespace BolsaDeTrabajo.Models
         public string PrimerApellido { get; set; } = string.Empty;
         public string? SegundoApellido { get; set; }
 
+        public string? PuestoBusca { get; set; }
+
         public Usuario? Usuario { get; set; }
 
-        public Aspirante(int idUsuario, string primerNombre, string primerApellido, string? segundoNombre = null, string? segundoApellido = null)
+        public Aspirante(int idUsuario, string primerNombre, string primerApellido, string? segundoNombre = null, string? segundoApellido = null, string? puestoBusca = null)
         {
             IdUsuario = idUsuario;
             PrimerNombre = primerNombre;
             PrimerApellido = primerApellido;
             SegundoNombre = segundoNombre;
             SegundoApellido = segundoApellido;
+            PuestoBusca = puestoBusca;
         }
         public void Validate()
         {

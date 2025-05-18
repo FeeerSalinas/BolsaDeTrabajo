@@ -15,5 +15,7 @@ namespace BolsaDeTrabajo.Queries
         public record ObtenerTodasOfertasQuery() : IRequest<List<OfertaLaboral>>;
 
         public record ObtenerOfertasPaginadasQuery(int Page, int PageSize) : IRequest<List<OfertaLaboral>>;
+
+        public record ObtenerOfertaPorPerfilAcademico(string perfilAcademico) : IRequest<List<OfertaLaboral>>;
     }
 }

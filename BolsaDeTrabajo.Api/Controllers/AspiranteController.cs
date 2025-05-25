@@ -47,7 +47,7 @@ namespace BolsaDeTrabajo.Api.Controllers
             return Ok(aspirante);
         }
 
-        [HttpGet("todos")]
+        [HttpGet("todos")] 
         public async Task<IActionResult> ObtenerTodos()
         {
             var lista = await _mediator.Send(new ObtenerAspirantesQuery());

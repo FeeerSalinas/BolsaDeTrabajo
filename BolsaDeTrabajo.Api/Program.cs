@@ -24,6 +24,33 @@ if (string.IsNullOrEmpty(jwtKey) || jwtKey.Length < 32)
     throw new Exception("La clave JWT debe tener al menos 32 caracteres.");
 }
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:8080",   // Vue CLI dev server
+                "http://localhost:3000",   // React/otros
+                "http://localhost:5173",   // Vite
+                "http://localhost:4200",   // Angular
+                "https://localhost:8080",  // HTTPS variants
+                "https://localhost:3000",
+                "https://localhost:5173",
+                "https://localhost:4200"
+              )
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials()
+              .SetIsOriginAllowed(origin =>
+              {
+                  // Permitir localhost en cualquier puerto para desarrollo
+                  return Uri.TryCreate(origin, UriKind.Absolute, out var uri) &&
+                         (uri.Host == "localhost" || uri.Host == "127.0.0.1");
+              });
+    });
+});
+
 // Autenticación JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -61,7 +88,6 @@ builder.Services.AddScoped<IExamenRepo, ExamenRepo>();
 builder.Services.AddScoped<IIdiomaRepo, IdiomaRepo>();
 builder.Services.AddScoped<IOfertaRepo, OfertaRepo>();
 builder.Services.AddScoped<IAplicacionOfertaRepo, AplicacionOfertaRepo>();
-
 
 builder.Services.AddSingleton<JwtTokenGenerator>();
 
@@ -101,12 +127,15 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-// Middleware
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+
+app.UseCors();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

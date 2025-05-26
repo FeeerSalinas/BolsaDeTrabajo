@@ -26,6 +26,9 @@ namespace BolsaDeTrabajo.Handlers.Commands.User
             var usuario = await _repo.ObtenerPorCorreoAsync(request.Correo, cancellationToken);
             if (usuario is null) return null;
 
+            if (usuario.Estado != "Activado")
+                throw new UnauthorizedAccessException("Tu cuenta se encuentra desactivada, contacta a administración para activarla");
+
             if (!PasswordHasher.Verify(request.Clave, usuario.Clave)) return null;
 
             return _jwt.GenerateToken(usuario.IdUsuario, usuario.Rol);

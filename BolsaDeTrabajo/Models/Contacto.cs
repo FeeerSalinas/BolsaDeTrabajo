@@ -13,13 +13,22 @@ namespace BolsaDeTrabajo.Models
         public string TelefonoPersonal { get; set; } = string.Empty;
         public string TelefonoFijo { get; set; } = string.Empty;
 
+        // 🆕 NUEVO CAMPO AGREGADO
+        public string? RedesSociales { get; set; }
+
         public Usuario? Usuario { get; set; }
 
-        public Contacto(int idUsuario, string telefonoPersonal, string telefonoFijo)
+        // Constructor actualizado
+        public Contacto(
+            int idUsuario,
+            string telefonoPersonal,
+            string telefonoFijo,
+            string? redesSociales = null)
         {
             IdUsuario = idUsuario;
             TelefonoPersonal = telefonoPersonal;
             TelefonoFijo = telefonoFijo;
+            RedesSociales = redesSociales;
         }
 
         public void Validate()
@@ -32,6 +41,10 @@ namespace BolsaDeTrabajo.Models
 
             if (string.IsNullOrWhiteSpace(TelefonoFijo))
                 throw new ValidationException("El teléfono fijo no puede estar vacío.");
+
+            // 🆕 VALIDACIÓN PARA REDES SOCIALES
+            if (!string.IsNullOrEmpty(RedesSociales) && RedesSociales.Length > 1000)
+                throw new ValidationException("Las redes sociales no pueden exceder 1000 caracteres.");
         }
     }
 }

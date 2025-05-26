@@ -27,7 +27,14 @@ namespace BolsaDeTrabajo.Handlers.Commands.Aspirant
                 request.PrimerApellido,
                 request.SegundoNombre,
                 request.SegundoApellido,
-                request.PuestoBusca
+                request.PuestoBusca,
+                // 🆕 NUEVOS PARÁMETROS
+                request.Genero,
+                request.FechaNacimiento,
+                request.TipoDocumentoIdentidad,
+                request.NumeroDocumentoIdentidad,
+                request.Nit,
+                request.Nup
             )
             {
                 IdAspirante = request.IdAspirante

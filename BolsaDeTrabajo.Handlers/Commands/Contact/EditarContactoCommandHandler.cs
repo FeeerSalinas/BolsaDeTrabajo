@@ -18,7 +18,13 @@ namespace BolsaDeTrabajo.Handlers.Commands.Contact
 
         public async Task<bool> Handle(EditarContactoCommand request, CancellationToken cancellationToken)
         {
-            var contacto = new Contacto(request.IdUsuario, request.TelefonoPersonal, request.TelefonoFijo);
+            var contacto = new Contacto(
+                request.IdUsuario,
+                request.TelefonoPersonal,
+                request.TelefonoFijo,
+                // 🆕 NUEVO PARÁMETRO
+                request.RedesSociales
+            );
             return await _repo.EditarAsync(contacto, cancellationToken);
         }
     }

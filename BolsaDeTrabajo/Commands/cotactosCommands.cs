@@ -9,9 +9,21 @@ namespace BolsaDeTrabajo.Commands
 {
     public class cotactosCommands
     {
-        public record CrearContactoCommand(int IdUsuario, string TelefonoPersonal, string TelefonoFijo) : IRequest<bool>;
+        public record CrearContactoCommand(
+            int IdUsuario,
+            string TelefonoPersonal,
+            string TelefonoFijo,
+            // 🆕 NUEVO PARÁMETRO
+            string? RedesSociales = null
+        ) : IRequest<bool>;
 
-        public record EditarContactoCommand(int IdUsuario, string TelefonoPersonal, string TelefonoFijo) : IRequest<bool>;
+        public record EditarContactoCommand(
+            int IdUsuario,
+            string TelefonoPersonal,
+            string TelefonoFijo,
+            // 🆕 NUEVO PARÁMETRO
+            string? RedesSociales = null
+        ) : IRequest<bool>;
 
         public record EliminarContactoCommand(int IdUsuario) : IRequest<bool>;
     }

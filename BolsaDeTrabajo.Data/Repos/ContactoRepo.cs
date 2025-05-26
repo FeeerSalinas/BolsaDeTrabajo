@@ -29,8 +29,12 @@ namespace BolsaDeTrabajo.Data.Repos
             var existente = await _context.Contactos.FindAsync(new object[] { contacto.IdUsuario }, cancellationToken);
             if (existente is null) return false;
 
+            // ✅ CAMPOS EXISTENTES (conservados)
             existente.TelefonoPersonal = contacto.TelefonoPersonal;
             existente.TelefonoFijo = contacto.TelefonoFijo;
+
+            // 🆕 NUEVO CAMPO AGREGADO
+            existente.RedesSociales = contacto.RedesSociales;
 
             return await _context.SaveChangesAsync(cancellationToken) > 0;
         }

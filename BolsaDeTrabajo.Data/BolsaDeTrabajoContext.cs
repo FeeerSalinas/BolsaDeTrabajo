@@ -24,7 +24,6 @@ namespace BolsaDeTrabajo.Data
         public DbSet<Idioma> Idiomas { get; set; }
         public DbSet<AplicacionOferta> AplicacionesOferta { get; set; }
         public DbSet<OfertaLaboral> OfertasLaborales { get; set; }
-
         public DbSet<Publicacion> Publicaciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,6 +70,21 @@ namespace BolsaDeTrabajo.Data
                 .HasForeignKey<Contacto>(c => c.IdUsuario)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // 🆕 MAPEO EXPLÍCITO PARA CONTACTO CON NUEVOS CAMPOS
+            modelBuilder.Entity<Contacto>()
+                .Property(c => c.TelefonoPersonal)
+                .HasColumnName("telefonoPersonal")
+                .IsRequired();
+
+            modelBuilder.Entity<Contacto>()
+                .Property(c => c.TelefonoFijo)
+                .HasColumnName("telefonoFijo")
+                .IsRequired();
+
+            modelBuilder.Entity<Contacto>()
+                .Property(c => c.RedesSociales)
+                .HasColumnName("redesSociales");
+
             modelBuilder.Entity<Empresa>().HasKey(e => e.IdEmpresa);
             modelBuilder.Entity<Empresa>()
                 .HasOne(e => e.Usuario)
@@ -84,6 +98,55 @@ namespace BolsaDeTrabajo.Data
                 .WithMany()
                 .HasForeignKey(a => a.IdUsuario)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // 🆕 MAPEO EXPLÍCITO PARA ASPIRANTE CON TODOS LOS CAMPOS
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.PrimerNombre)
+                .HasColumnName("primerNombre")
+                .IsRequired();
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.SegundoNombre)
+                .HasColumnName("segundoNombre");
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.PrimerApellido)
+                .HasColumnName("primerApellido")
+                .IsRequired();
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.SegundoApellido)
+                .HasColumnName("segundoApellido");
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.PuestoBusca)
+                .HasColumnName("puestoBusca");
+
+            // 🆕 MAPEO DE LOS NUEVOS CAMPOS DE ASPIRANTE
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.Genero)
+                .HasColumnName("genero");
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.FechaNacimiento)
+                .HasColumnName("fechaNacimiento")
+                .HasColumnType("date");
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.TipoDocumentoIdentidad)
+                .HasColumnName("tipoDocumentoIdentidad");
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.NumeroDocumentoIdentidad)
+                .HasColumnName("numeroDocumentoIdentidad");
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.Nit)
+                .HasColumnName("nit");
+
+            modelBuilder.Entity<Aspirante>()
+                .Property(a => a.Nup)
+                .HasColumnName("nup");
 
             modelBuilder.Entity<DocumentosAspirante>().HasKey(d => d.IdAspirante);
             modelBuilder.Entity<DocumentosAspirante>()

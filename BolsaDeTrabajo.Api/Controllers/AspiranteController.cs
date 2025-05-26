@@ -1,9 +1,14 @@
-﻿using MediatR;
+﻿// ===================================================
+// AspiranteController.cs - Compatible con queries existentes
+// ===================================================
 using Microsoft.AspNetCore.Mvc;
+using MediatR;
+using BolsaDeTrabajo.Commands;
+using BolsaDeTrabajo.Queries;
 using static BolsaDeTrabajo.Commands.aspiranteCommands;
 using static BolsaDeTrabajo.Queries.aspiranteQueries;
 
-namespace BolsaDeTrabajo.Api.Controllers
+namespace BolsaDeTrabajo.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -17,55 +22,299 @@ namespace BolsaDeTrabajo.Api.Controllers
         }
 
         [HttpPost("crear")]
-        public async Task<IActionResult> Crear([FromBody] CrearAspiranteCommand command)
+        public async Task<ActionResult<int>> Crear([FromBody] CrearAspiranteCommand command)
         {
-            var id = await _mediator.Send(command);
-            return CreatedAtAction(nameof(ObtenerPorId), new { id }, new { id });
+            try
+            {
+                var resultado = await _mediator.Send(command);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al crear aspirante: {ex.Message}");
+            }
         }
 
         [HttpPut("editar")]
-        public async Task<IActionResult> Editar([FromBody] EditarAspiranteCommand command)
+        public async Task<ActionResult<bool>> Editar([FromBody] EditarAspiranteCommand command)
         {
-            var result = await _mediator.Send(command);
-            if (!result) return NotFound();
-            return NoContent();
+            try
+            {
+                var resultado = await _mediator.Send(command);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al editar aspirante: {ex.Message}");
+            }
         }
 
         [HttpDelete("eliminar/{id}")]
-        public async Task<IActionResult> Eliminar(int id)
+        public async Task<ActionResult<bool>> Eliminar(int id)
         {
-            var result = await _mediator.Send(new EliminarAspiranteCommand(id));
-            if (!result) return NotFound();
-            return NoContent();
+            try
+            {
+                var command = new EliminarAspiranteCommand(id);
+                var resultado = await _mediator.Send(command);
+                return Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al eliminar aspirante: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObtenerPorId(int id)
+        public async Task<ActionResult<object>> ObtenerPorId(int id)
         {
-            var aspirante = await _mediator.Send(new ObtenerAspirantePorIdQuery(id));
-            if (aspirante == null) return NotFound();
-            return Ok(aspirante);
+            try
+            {
+                var query = new ObtenerAspirantePorIdQuery(id);
+                var resultado = await _mediator.Send(query);
+
+                if (resultado == null)
+                    return NotFound("Aspirante no encontrado");
+
+                // 🆕 MAPEAR TODOS LOS CAMPOS INCLUYENDO LOS NUEVOS
+                return Ok(new
+                {
+                    idAspirante = resultado.IdAspirante,
+                    idUsuario = resultado.IdUsuario,
+                    primerNombre = resultado.PrimerNombre,
+                    segundoNombre = resultado.SegundoNombre,
+                    primerApellido = resultado.PrimerApellido,
+                    segundoApellido = resultado.SegundoApellido,
+                    puestoBusca = resultado.PuestoBusca,
+                    // 🆕 NUEVOS CAMPOS EN LA RESPUESTA
+                    genero = resultado.Genero,
+                    fechaNacimiento = resultado.FechaNacimiento,
+                    tipoDocumentoIdentidad = resultado.TipoDocumentoIdentidad,
+                    numeroDocumentoIdentidad = resultado.NumeroDocumentoIdentidad,
+                    nit = resultado.Nit,
+                    nup = resultado.Nup
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener aspirante: {ex.Message}");
+            }
         }
 
+        // ✅ USAR LA QUERY EXISTENTE ObtenerAspirantesQuery
         [HttpGet("todos")]
-        public async Task<IActionResult> ObtenerTodos()
+        public async Task<ActionResult<List<object>>> ObtenerTodos()
         {
-            var lista = await _mediator.Send(new ObtenerAspirantesQuery());
-            return Ok(lista);
+            try
+            {
+                var query = new ObtenerAspirantesQuery();
+                var resultado = await _mediator.Send(query);
+
+                // 🆕 MAPEAR TODOS LOS CAMPOS INCLUYENDO LOS NUEVOS
+                var aspirantesFormateados = resultado.Select(a => new
+                {
+                    idAspirante = a.IdAspirante,
+                    idUsuario = a.IdUsuario,
+                    primerNombre = a.PrimerNombre,
+                    segundoNombre = a.SegundoNombre,
+                    primerApellido = a.PrimerApellido,
+                    segundoApellido = a.SegundoApellido,
+                    puestoBusca = a.PuestoBusca,
+                    // 🆕 NUEVOS CAMPOS EN LA RESPUESTA
+                    genero = a.Genero,
+                    fechaNacimiento = a.FechaNacimiento,
+                    tipoDocumentoIdentidad = a.TipoDocumentoIdentidad,
+                    numeroDocumentoIdentidad = a.NumeroDocumentoIdentidad,
+                    nit = a.Nit,
+                    nup = a.Nup
+                }).ToList();
+
+                return Ok(aspirantesFormateados);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener aspirantes: {ex.Message}");
+            }
         }
 
-        [HttpGet("paginado")]
-        public async Task<IActionResult> ObtenerPaginado([FromQuery] int page = 1, [FromQuery] int size = 10)
+        // 🆕 NUEVO ENDPOINT PARA OBTENER POR USUARIO
+        [HttpGet("usuario/{idUsuario}")]
+        public async Task<ActionResult<object>> ObtenerPorUsuario(int idUsuario)
         {
-            var resultado = await _mediator.Send(new ObtenerAspirantesPaginadosQuery(page, size));
-            return Ok(resultado);
+            try
+            {
+                var query = new ObtenerAspirantePorUsuarioQuery(idUsuario);
+                var resultado = await _mediator.Send(query);
+
+                if (resultado == null)
+                    return NotFound("Aspirante no encontrado para este usuario");
+
+                // 🆕 MAPEAR TODOS LOS CAMPOS INCLUYENDO LOS NUEVOS
+                return Ok(new
+                {
+                    idAspirante = resultado.IdAspirante,
+                    idUsuario = resultado.IdUsuario,
+                    primerNombre = resultado.PrimerNombre,
+                    segundoNombre = resultado.SegundoNombre,
+                    primerApellido = resultado.PrimerApellido,
+                    segundoApellido = resultado.SegundoApellido,
+                    puestoBusca = resultado.PuestoBusca,
+                    // 🆕 NUEVOS CAMPOS EN LA RESPUESTA
+                    genero = resultado.Genero,
+                    fechaNacimiento = resultado.FechaNacimiento,
+                    tipoDocumentoIdentidad = resultado.TipoDocumentoIdentidad,
+                    numeroDocumentoIdentidad = resultado.NumeroDocumentoIdentidad,
+                    nit = resultado.Nit,
+                    nup = resultado.Nup
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener aspirante por usuario: {ex.Message}");
+            }
         }
 
-        [HttpGet("filtro-puesto/{puestoBusca}")]
-        public async Task<IActionResult> ObtenerAspirantePorPuesto([FromRoute] string puestoBusca)
+        // ✅ CONSERVAR ENDPOINTS EXISTENTES
+        [HttpGet("paginados")]
+        public async Task<ActionResult<List<object>>> ObtenerPaginados([FromQuery] int pagina = 1, [FromQuery] int tamanoPagina = 10)
         {
-            var resultado = await _mediator.Send(new ObtenersAspirantesPorPuesto(puestoBusca));
-            return Ok(resultado);
+            try
+            {
+                var query = new ObtenerAspirantesPaginadosQuery(pagina, tamanoPagina);
+                var resultado = await _mediator.Send(query);
+
+                // 🆕 MAPEAR INCLUYENDO NUEVOS CAMPOS
+                var aspirantesFormateados = resultado.Select(a => new
+                {
+                    idAspirante = a.IdAspirante,
+                    idUsuario = a.IdUsuario,
+                    primerNombre = a.PrimerNombre,
+                    segundoNombre = a.SegundoNombre,
+                    primerApellido = a.PrimerApellido,
+                    segundoApellido = a.SegundoApellido,
+                    puestoBusca = a.PuestoBusca,
+                    // 🆕 NUEVOS CAMPOS
+                    genero = a.Genero,
+                    fechaNacimiento = a.FechaNacimiento,
+                    tipoDocumentoIdentidad = a.TipoDocumentoIdentidad,
+                    numeroDocumentoIdentidad = a.NumeroDocumentoIdentidad,
+                    nit = a.Nit,
+                    nup = a.Nup
+                }).ToList();
+
+                return Ok(aspirantesFormateados);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener aspirantes paginados: {ex.Message}");
+            }
+        }
+
+        [HttpGet("por-puesto/{puesto}")]
+        public async Task<ActionResult<List<object>>> ObtenerPorPuesto(string puesto)
+        {
+            try
+            {
+                var query = new ObtenersAspirantesPorPuesto(puesto);
+                var resultado = await _mediator.Send(query);
+
+                // 🆕 MAPEAR INCLUYENDO NUEVOS CAMPOS
+                var aspirantesFormateados = resultado.Select(a => new
+                {
+                    idAspirante = a.IdAspirante,
+                    idUsuario = a.IdUsuario,
+                    primerNombre = a.PrimerNombre,
+                    segundoNombre = a.SegundoNombre,
+                    primerApellido = a.PrimerApellido,
+                    segundoApellido = a.SegundoApellido,
+                    puestoBusca = a.PuestoBusca,
+                    // 🆕 NUEVOS CAMPOS
+                    genero = a.Genero,
+                    fechaNacimiento = a.FechaNacimiento,
+                    tipoDocumentoIdentidad = a.TipoDocumentoIdentidad,
+                    numeroDocumentoIdentidad = a.NumeroDocumentoIdentidad,
+                    nit = a.Nit,
+                    nup = a.Nup
+                }).ToList();
+
+                return Ok(aspirantesFormateados);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener aspirantes por puesto: {ex.Message}");
+            }
+        }
+
+        // 🆕 NUEVOS ENDPOINTS PARA BÚSQUEDAS ESPECÍFICAS
+        [HttpGet("por-documento/{numeroDocumento}")]
+        public async Task<ActionResult<object>> ObtenerPorDocumento(string numeroDocumento)
+        {
+            try
+            {
+                var query = new ObtenerAspirantePorDocumentoQuery(numeroDocumento);
+                var resultado = await _mediator.Send(query);
+
+                if (resultado == null)
+                    return NotFound("Aspirante no encontrado con ese documento");
+
+                return Ok(new
+                {
+                    idAspirante = resultado.IdAspirante,
+                    idUsuario = resultado.IdUsuario,
+                    primerNombre = resultado.PrimerNombre,
+                    segundoNombre = resultado.SegundoNombre,
+                    primerApellido = resultado.PrimerApellido,
+                    segundoApellido = resultado.SegundoApellido,
+                    puestoBusca = resultado.PuestoBusca,
+                    genero = resultado.Genero,
+                    fechaNacimiento = resultado.FechaNacimiento,
+                    tipoDocumentoIdentidad = resultado.TipoDocumentoIdentidad,
+                    numeroDocumentoIdentidad = resultado.NumeroDocumentoIdentidad,
+                    nit = resultado.Nit,
+                    nup = resultado.Nup
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener aspirante por documento: {ex.Message}");
+            }
+        }
+
+        [HttpGet("por-rango-edad")]
+        public async Task<ActionResult<List<object>>> ObtenerPorRangoEdad([FromQuery] int edadMinima, [FromQuery] int edadMaxima)
+        {
+            try
+            {
+                var query = new ObtenerAspirantesPorRangoEdadQuery(edadMinima, edadMaxima);
+                var resultado = await _mediator.Send(query);
+
+                var aspirantesFormateados = resultado.Select(a => new
+                {
+                    idAspirante = a.IdAspirante,
+                    idUsuario = a.IdUsuario,
+                    primerNombre = a.PrimerNombre,
+                    segundoNombre = a.SegundoNombre,
+                    primerApellido = a.PrimerApellido,
+                    segundoApellido = a.SegundoApellido,
+                    puestoBusca = a.PuestoBusca,
+                    genero = a.Genero,
+                    fechaNacimiento = a.FechaNacimiento,
+                    tipoDocumentoIdentidad = a.TipoDocumentoIdentidad,
+                    numeroDocumentoIdentidad = a.NumeroDocumentoIdentidad,
+                    nit = a.Nit,
+                    nup = a.Nup,
+                    // Calcular edad
+                    edad = a.FechaNacimiento.HasValue ?
+                        DateTime.Today.Year - a.FechaNacimiento.Value.Year -
+                        (DateTime.Today < a.FechaNacimiento.Value.AddYears(DateTime.Today.Year - a.FechaNacimiento.Value.Year) ? 1 : 0)
+                        : (int?)null
+                }).ToList();
+
+                return Ok(aspirantesFormateados);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al obtener aspirantes por rango de edad: {ex.Message}");
+            }
         }
     }
 }

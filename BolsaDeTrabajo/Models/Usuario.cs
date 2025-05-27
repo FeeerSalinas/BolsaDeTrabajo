@@ -19,12 +19,15 @@ namespace BolsaDeTrabajo.Models
 
         public DateTimeOffset FechaRegistro { get; set; }
 
+        public string? Estado { get; set; } = string.Empty;
+
         public Usuario(string correo, string clave, string rol)
         {
             Correo = correo;
             Clave = clave;
             Rol = rol;
             FechaRegistro = DateTimeOffset.Now;
+            Estado = "Activado";
         }
         public void Validate()
         {

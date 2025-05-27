@@ -127,14 +127,14 @@ builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-// Middleware - ⭐ ORDEN CORREGIDO
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// ⭐ CORS debe ir ANTES que HTTPS y Authentication
+
 app.UseCors();
 
 app.UseHttpsRedirection();

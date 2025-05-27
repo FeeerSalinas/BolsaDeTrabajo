@@ -33,7 +33,7 @@ namespace BolsaDeTrabajo.Handlers.Commands.Aspirant
                 request.FechaNacimiento,
                 request.TipoDocumentoIdentidad,
                 request.NumeroDocumentoIdentidad,
-                request.Nit
+                request.Nit,
                 request.Nup
             );
             return await _repo.CrearAsync(aspirante, cancellationToken);

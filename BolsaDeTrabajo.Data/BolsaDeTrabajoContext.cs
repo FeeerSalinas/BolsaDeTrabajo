@@ -70,7 +70,6 @@ namespace BolsaDeTrabajo.Data
                 .HasForeignKey<Contacto>(c => c.IdUsuario)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 🆕 MAPEO EXPLÍCITO PARA CONTACTO CON NUEVOS CAMPOS
             modelBuilder.Entity<Contacto>()
                 .Property(c => c.TelefonoPersonal)
                 .HasColumnName("telefonoPersonal")
@@ -99,7 +98,6 @@ namespace BolsaDeTrabajo.Data
                 .HasForeignKey(a => a.IdUsuario)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 🆕 MAPEO EXPLÍCITO PARA ASPIRANTE CON TODOS LOS CAMPOS
             modelBuilder.Entity<Aspirante>()
                 .Property(a => a.PrimerNombre)
                 .HasColumnName("primerNombre")
@@ -122,7 +120,6 @@ namespace BolsaDeTrabajo.Data
                 .Property(a => a.PuestoBusca)
                 .HasColumnName("puestoBusca");
 
-            // 🆕 MAPEO DE LOS NUEVOS CAMPOS DE ASPIRANTE
             modelBuilder.Entity<Aspirante>()
                 .Property(a => a.Genero)
                 .HasColumnName("genero");

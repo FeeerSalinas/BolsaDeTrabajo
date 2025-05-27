@@ -13,7 +13,6 @@ namespace BolsaDeTrabajo.Commands
             int IdUsuario,
             string TelefonoPersonal,
             string TelefonoFijo,
-            // 🆕 NUEVO PARÁMETRO
             string? RedesSociales = null
         ) : IRequest<bool>;
 
@@ -21,7 +20,6 @@ namespace BolsaDeTrabajo.Commands
             int IdUsuario,
             string TelefonoPersonal,
             string TelefonoFijo,
-            // 🆕 NUEVO PARÁMETRO
             string? RedesSociales = null
         ) : IRequest<bool>;
 

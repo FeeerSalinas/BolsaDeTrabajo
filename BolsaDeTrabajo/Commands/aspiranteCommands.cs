@@ -16,7 +16,6 @@ namespace BolsaDeTrabajo.Commands
             string? SegundoNombre,
             string? SegundoApellido,
             string? PuestoBusca,
-            // 🆕 NUEVOS PARÁMETROS
             string? Genero = null,
             DateTime? FechaNacimiento = null,
             string? TipoDocumentoIdentidad = null,
@@ -33,7 +32,6 @@ namespace BolsaDeTrabajo.Commands
             string? SegundoNombre,
             string? SegundoApellido,
             string? PuestoBusca,
-            // 🆕 NUEVOS PARÁMETROS
             string? Genero = null,
             DateTime? FechaNacimiento = null,
             string? TipoDocumentoIdentidad = null,

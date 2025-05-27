@@ -22,7 +22,6 @@ namespace BolsaDeTrabajo.Handlers.Commands.Contact
                 request.IdUsuario,
                 request.TelefonoPersonal,
                 request.TelefonoFijo,
-                // 🆕 NUEVO PARÁMETRO
                 request.RedesSociales
             );
             return await _repo.CrearAsync(contacto, cancellationToken);

@@ -29,16 +29,12 @@ namespace BolsaDeTrabajo.Data.Repos
         {
             var existente = await _context.Aspirantes.FindAsync(new object[] { aspirante.IdAspirante }, cancellationToken);
             if (existente == null) return false;
-
-            // ✅ CAMPOS EXISTENTES (conservados)
             existente.PrimerNombre = aspirante.PrimerNombre;
             existente.SegundoNombre = aspirante.SegundoNombre;
             existente.PrimerApellido = aspirante.PrimerApellido;
             existente.SegundoApellido = aspirante.SegundoApellido;
             existente.IdUsuario = aspirante.IdUsuario;
             existente.PuestoBusca = aspirante.PuestoBusca;
-
-            // 🆕 NUEVOS CAMPOS AGREGADOS
             existente.Genero = aspirante.Genero;
             existente.FechaNacimiento = aspirante.FechaNacimiento;
             existente.TipoDocumentoIdentidad = aspirante.TipoDocumentoIdentidad;

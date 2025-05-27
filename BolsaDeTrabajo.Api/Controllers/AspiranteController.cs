@@ -1,7 +1,4 @@
-﻿// ===================================================
-// AspiranteController.cs - Compatible con queries existentes
-// ===================================================
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using BolsaDeTrabajo.Commands;
 using BolsaDeTrabajo.Queries;
@@ -75,7 +72,6 @@ namespace BolsaDeTrabajo.Controllers
                 if (resultado == null)
                     return NotFound("Aspirante no encontrado");
 
-                // 🆕 MAPEAR TODOS LOS CAMPOS INCLUYENDO LOS NUEVOS
                 return Ok(new
                 {
                     idAspirante = resultado.IdAspirante,
@@ -85,7 +81,6 @@ namespace BolsaDeTrabajo.Controllers
                     primerApellido = resultado.PrimerApellido,
                     segundoApellido = resultado.SegundoApellido,
                     puestoBusca = resultado.PuestoBusca,
-                    // 🆕 NUEVOS CAMPOS EN LA RESPUESTA
                     genero = resultado.Genero,
                     fechaNacimiento = resultado.FechaNacimiento,
                     tipoDocumentoIdentidad = resultado.TipoDocumentoIdentidad,
@@ -100,7 +95,6 @@ namespace BolsaDeTrabajo.Controllers
             }
         }
 
-        // ✅ USAR LA QUERY EXISTENTE ObtenerAspirantesQuery
         [HttpGet("todos")]
         public async Task<ActionResult<List<object>>> ObtenerTodos()
         {
@@ -109,7 +103,6 @@ namespace BolsaDeTrabajo.Controllers
                 var query = new ObtenerAspirantesQuery();
                 var resultado = await _mediator.Send(query);
 
-                // 🆕 MAPEAR TODOS LOS CAMPOS INCLUYENDO LOS NUEVOS
                 var aspirantesFormateados = resultado.Select(a => new
                 {
                     idAspirante = a.IdAspirante,
@@ -119,7 +112,6 @@ namespace BolsaDeTrabajo.Controllers
                     primerApellido = a.PrimerApellido,
                     segundoApellido = a.SegundoApellido,
                     puestoBusca = a.PuestoBusca,
-                    // 🆕 NUEVOS CAMPOS EN LA RESPUESTA
                     genero = a.Genero,
                     fechaNacimiento = a.FechaNacimiento,
                     tipoDocumentoIdentidad = a.TipoDocumentoIdentidad,
@@ -136,7 +128,7 @@ namespace BolsaDeTrabajo.Controllers
             }
         }
 
-        // 🆕 NUEVO ENDPOINT PARA OBTENER POR USUARIO
+
         [HttpGet("usuario/{idUsuario}")]
         public async Task<ActionResult<object>> ObtenerPorUsuario(int idUsuario)
         {
@@ -148,7 +140,6 @@ namespace BolsaDeTrabajo.Controllers
                 if (resultado == null)
                     return NotFound("Aspirante no encontrado para este usuario");
 
-                // 🆕 MAPEAR TODOS LOS CAMPOS INCLUYENDO LOS NUEVOS
                 return Ok(new
                 {
                     idAspirante = resultado.IdAspirante,
@@ -158,7 +149,6 @@ namespace BolsaDeTrabajo.Controllers
                     primerApellido = resultado.PrimerApellido,
                     segundoApellido = resultado.SegundoApellido,
                     puestoBusca = resultado.PuestoBusca,
-                    // 🆕 NUEVOS CAMPOS EN LA RESPUESTA
                     genero = resultado.Genero,
                     fechaNacimiento = resultado.FechaNacimiento,
                     tipoDocumentoIdentidad = resultado.TipoDocumentoIdentidad,
@@ -173,7 +163,6 @@ namespace BolsaDeTrabajo.Controllers
             }
         }
 
-        // ✅ CONSERVAR ENDPOINTS EXISTENTES
         [HttpGet("paginados")]
         public async Task<ActionResult<List<object>>> ObtenerPaginados([FromQuery] int pagina = 1, [FromQuery] int tamanoPagina = 10)
         {
@@ -182,7 +171,7 @@ namespace BolsaDeTrabajo.Controllers
                 var query = new ObtenerAspirantesPaginadosQuery(pagina, tamanoPagina);
                 var resultado = await _mediator.Send(query);
 
-                // 🆕 MAPEAR INCLUYENDO NUEVOS CAMPOS
+
                 var aspirantesFormateados = resultado.Select(a => new
                 {
                     idAspirante = a.IdAspirante,
@@ -192,7 +181,6 @@ namespace BolsaDeTrabajo.Controllers
                     primerApellido = a.PrimerApellido,
                     segundoApellido = a.SegundoApellido,
                     puestoBusca = a.PuestoBusca,
-                    // 🆕 NUEVOS CAMPOS
                     genero = a.Genero,
                     fechaNacimiento = a.FechaNacimiento,
                     tipoDocumentoIdentidad = a.TipoDocumentoIdentidad,
@@ -217,7 +205,6 @@ namespace BolsaDeTrabajo.Controllers
                 var query = new ObtenersAspirantesPorPuesto(puesto);
                 var resultado = await _mediator.Send(query);
 
-                // 🆕 MAPEAR INCLUYENDO NUEVOS CAMPOS
                 var aspirantesFormateados = resultado.Select(a => new
                 {
                     idAspirante = a.IdAspirante,
@@ -227,7 +214,6 @@ namespace BolsaDeTrabajo.Controllers
                     primerApellido = a.PrimerApellido,
                     segundoApellido = a.SegundoApellido,
                     puestoBusca = a.PuestoBusca,
-                    // 🆕 NUEVOS CAMPOS
                     genero = a.Genero,
                     fechaNacimiento = a.FechaNacimiento,
                     tipoDocumentoIdentidad = a.TipoDocumentoIdentidad,
@@ -244,7 +230,6 @@ namespace BolsaDeTrabajo.Controllers
             }
         }
 
-        // 🆕 NUEVOS ENDPOINTS PARA BÚSQUEDAS ESPECÍFICAS
         [HttpGet("por-documento/{numeroDocumento}")]
         public async Task<ActionResult<object>> ObtenerPorDocumento(string numeroDocumento)
         {

@@ -28,7 +28,6 @@ namespace BolsaDeTrabajo.Handlers.Commands.Aspirant
                 request.SegundoNombre,
                 request.SegundoApellido,
                 request.PuestoBusca,
-                // 🆕 NUEVOS PARÁMETROS
                 request.Genero,
                 request.FechaNacimiento,
                 request.TipoDocumentoIdentidad,

@@ -17,8 +17,6 @@ namespace BolsaDeTrabajo.Models
         public string PrimerApellido { get; set; } = string.Empty;
         public string? SegundoApellido { get; set; }
         public string? PuestoBusca { get; set; }
-
-        // 🆕 NUEVOS CAMPOS AGREGADOS (sincronizados con la BD)
         public string? Genero { get; set; }
         public DateTime? FechaNacimiento { get; set; }
         public string? TipoDocumentoIdentidad { get; set; }
@@ -28,7 +26,6 @@ namespace BolsaDeTrabajo.Models
 
         public Usuario? Usuario { get; set; }
 
-        // Constructor actualizado con todos los campos
         public Aspirante(
             int idUsuario,
             string primerNombre,
@@ -36,7 +33,6 @@ namespace BolsaDeTrabajo.Models
             string? segundoNombre = null,
             string? segundoApellido = null,
             string? puestoBusca = null,
-            // 🆕 NUEVOS PARÁMETROS
             string? genero = null,
             DateTime? fechaNacimiento = null,
             string? tipoDocumentoIdentidad = null,
@@ -50,7 +46,6 @@ namespace BolsaDeTrabajo.Models
             SegundoNombre = segundoNombre;
             SegundoApellido = segundoApellido;
             PuestoBusca = puestoBusca;
-            // 🆕 ASIGNAR NUEVOS CAMPOS
             Genero = genero;
             FechaNacimiento = fechaNacimiento;
             TipoDocumentoIdentidad = tipoDocumentoIdentidad;
@@ -70,7 +65,6 @@ namespace BolsaDeTrabajo.Models
             if (string.IsNullOrWhiteSpace(PrimerApellido))
                 throw new ValidationException("El primer apellido no puede estar vacío.");
 
-            // 🆕 VALIDACIONES NUEVAS
             if (FechaNacimiento.HasValue && FechaNacimiento > DateTime.Now)
                 throw new ValidationException("La fecha de nacimiento no puede ser futura.");
 
